@@ -4,12 +4,14 @@ const openai = new OpenAI({
   apiKey: process.env["OPENAI_API_KEY"], // This is the default and can be omitted
 });
 
-export async function POST() {
+export async function POST(request: Request) {
   console.log("hello");
+  const data = await request.json();
+  console.log(data.prompt);
 
   const response = await openai.images.generate({
     model: "dall-e-3",
-    prompt: "A simple line drawing sharpie style sketch of siamese cat",
+    prompt: data.prompt,
     n: 1,
     size: "1024x1024",
   });
