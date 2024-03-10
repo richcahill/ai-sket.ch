@@ -4,21 +4,11 @@ import { useState } from "react";
 import { StyleSelector } from "@/components/style-selector";
 import { Button } from "@/components/ui/button";
 import { checkPassword } from "@/actions/checkPassword";
-import {
-  ResizablePanelGroup,
-  ResizablePanel,
-  ResizableHandle,
-} from "@/components/ui/resizable";
+import { AnimatePresence, motion } from "framer-motion";
 import { Loader, Wand } from "lucide-react";
 import { type Style, styles } from "@/lib/styles";
-import { toast } from "sonner";
-import TextareaAutosize from "react-textarea-autosize";
 
-interface Props {
-  // Define your component props here
-}
-
-const Generator = (props: Props) => {
+const Generator = () => {
   const [image, setImage] = useState<string | null>(null);
   const [revisedPrompt, setRevisedPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -97,32 +87,56 @@ const Generator = (props: Props) => {
           </Button>
         </div>
       </div>
-      {/* <div className="h-full self-stretch border-r border-black/50 flex-grow">
-        hey
-      </div> */}
       <div className="flex items-center justify-center md:w-1/2">
         <div className="aspect-square max-h-screen w-full flex items-center justify-center">
-          {error && (
-            <div className="flex flex-col items-center gap-2 text-sm text-red-500">
-              {error}
-            </div>
-          )}
-          {image && !loading && !error && (
-            <a href={image} target="_blank" rel="noopener noreferrer">
-              <img
-                src={image}
-                alt={revisedPrompt || prompt}
-                className="max-w-full max-h-full rounded-md cursor-crosshair"
-                // copy the image to clipboard on click
-              />
-            </a>
-          )}
-          {loading && <Loader size={24} className="animate-spin" />}
-          {!image && !loading && !error && (
-            <div className="flex flex-col items-center gap-2 text-sm text-black/10">
-              Your artwork will appear here.
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col items-center gap-2 text-sm text-red-500"
+              >
+                {error}
+              </motion.div>
+            )}
+            {image && !loading && !error && (
+              <motion.a
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                href={image}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img
+                  src={image}
+                  alt={revisedPrompt || prompt}
+                  className="max-w-full max-h-full rounded-md cursor-crosshair"
+                  // copy the image to clipboard on click
+                />
+              </motion.a>
+            )}
+            {loading && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+              >
+                <Loader size={24} className="animate-spin" />
+              </motion.div>
+            )}
+            {!image && !loading && !error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="flex flex-col items-center gap-2 text-sm text-black/10"
+              >
+                Your artwork will appear here.
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </div>
