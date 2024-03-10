@@ -45,10 +45,10 @@ const Generator = (props: Props) => {
   return (
     <ResizablePanelGroup
       direction="horizontal"
-      className="gap-4 w-full p-4 bg-slate-50 rounded-md"
+      className="gap-4 w-full p-4 rounded-md"
     >
       <ResizablePanel
-        className="flex flex-col gap-2 p-2 min-w-72 max-w-xl"
+        className="flex flex-col gap-2 min-w-72 max-w-xl"
         defaultSize={33}
       >
         <h1 className="font-medium">Prompt</h1>
@@ -62,6 +62,11 @@ const Generator = (props: Props) => {
             className="w-full h-11 border p-2 flex-1 leading-tight bg-white/40 rounded-sm"
           />
         </div>
+        <input
+          type="password"
+          placeholder="Password"
+          className="border p-2 leading-tight bg-white/40 rounded-sm"
+        />
         <Button
           className="rounded-sm"
           onClick={generateImage}
@@ -69,17 +74,16 @@ const Generator = (props: Props) => {
         >
           {(!loading && "Generate Sketch") || "Generating..."}
         </Button>
-        {revisedPrompt && <p className="text-xs opacity-20">{revisedPrompt}</p>}
       </ResizablePanel>
       <ResizableHandle />
 
-      <ResizablePanel className="p-2">
+      <ResizablePanel defaultSize={67}>
         <div className="aspect-square max-h-screen w-full flex items-center justify-center">
-          {image && (
+          {image && !loading && (
             <div>
               <img
                 src={image}
-                alt="generated image"
+                alt={revisedPrompt || prompt}
                 className="max-w-full max-h-full rounded-md"
               />
             </div>

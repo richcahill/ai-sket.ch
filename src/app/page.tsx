@@ -3,12 +3,14 @@ import Generator from "@/components/generator";
 export default function Home() {
   return (
     <main className="flex min-h-screen max-h-screen container mx-auto flex-col items-stretch justify-start p-2">
-      <nav className="flex justify-between px-6 py-3">
-        <h1 className="text-xl font-bold">ai-sket.ch</h1>
+      <nav className="flex justify-between p-4">
+        <h1 className="text-xl font-medium tracking-tight">ai-sket.ch</h1>
         <div>
           <a
             href="https://richmak.es"
-            className=" fill-black/50 hover:fill-black/80 transition-colors"
+            className=" fill-black hover:fill-black/80 transition-colors"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             <svg
               className="h-6 hover:rotate-180 transition-all duration-200"
