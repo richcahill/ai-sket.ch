@@ -1,11 +1,12 @@
 import Generator from "@/components/generator";
+import Logo from "@/components/logo";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen max-h-screen container mx-auto flex-col items-stretch justify-start p-2">
       <nav className="flex justify-between p-4">
         <a href="/">
-          <h1 className="text-2xl text-blue-400 tracking-tight">ai-sket.ch</h1>
+          <Logo className="h-5" />
         </a>
         <div>
           <a

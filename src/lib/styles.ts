@@ -5,7 +5,7 @@ export type Style = {
 
 export const styles = [
   {
-    title: "Coloured Storyboard",
+    title: "Pastel Color Illustration",
     prompt:
       "Create an illustration where the style should be minimalistic with a pastel color palette, clean lines, and a hand-drawn, sketchy feel but with chunky lines. The illustration should have perspective that gives a sense of depth, and the overall tone should be inviting and informative. Use a limited color scheme with soft hues and ensure that the lines are not too sharp. The illustration should be of ",
   },
@@ -13,5 +13,10 @@ export const styles = [
     title: "Sharpie Sketch",
     prompt:
       "Create an illustration where the style should be simple hand drawn in the style of a minimalist sharpie sketch using and using only black and white. The illustration should be of ",
+  },
+  {
+    title: "Realistic Scene",
+    prompt:
+      "Create a realistic photo where the style is minimalist and professional. The photo should be of ",
   },
 ];
