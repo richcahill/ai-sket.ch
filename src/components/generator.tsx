@@ -3,6 +3,13 @@
 import { useState } from "react";
 import Image from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
+import { Button } from "@/components/ui/button";
+import {
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle,
+} from "@/components/ui/resizable";
+import { Loader } from "lucide-react";
 
 interface Props {
   // Define your component props here
@@ -20,7 +27,7 @@ const Generator = (props: Props) => {
     setLoading(true);
 
     let sketchPrompt =
-      (await "A simple line drawing sharpie style sketch of ") + prompt;
+      "A simple line drawing sharpie style sketch of " + prompt;
     const response = await fetch("/api", {
       method: "POST",
       headers: {
@@ -36,38 +43,56 @@ const Generator = (props: Props) => {
   };
 
   return (
-    <div className="flex flex-col gap-8 w-96 p-4 bg-slate-100 rounded-md">
-      <h1>Prompt:</h1>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="prompt" className="text-sm opacity-65 ml-2">
-          A simple line drawing sharpie style sketch of...
-        </label>
-        <TextareaAutosize
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          className="w-full h-11 border rounded-md p-2"
-        />
-      </div>
-
-      <button
-        className="px-4 h-11 bg-slate-900 text-white rounded-md"
-        onClick={generateImage}
+    <ResizablePanelGroup
+      direction="horizontal"
+      className="gap-4 w-full p-4 bg-slate-50 rounded-md"
+    >
+      <ResizablePanel
+        className="flex flex-col gap-2 p-2 min-w-72 max-w-xl"
+        defaultSize={33}
       >
-        Generate Image
-      </button>
-      {loading && <p>Loading...</p>}
-      {revisedPrompt && <p className="text-xs opacity-20">{revisedPrompt}</p>}
-      {image && (
-        <div>
-          <img
-            src={image}
-            alt="generated image"
-            className="max-w-full max-h-full rounded-md"
+        <h1 className="font-medium">Prompt</h1>
+        <div className="flex flex-col gap-1 flex-1">
+          <label htmlFor="prompt" className="text-sm opacity-30 leading-tight">
+            A simple line drawing sharpie style sketch of...
+          </label>
+          <TextareaAutosize
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            className="w-full h-11 border p-2 flex-1 leading-tight bg-white/40 rounded-sm"
           />
         </div>
-      )}
-    </div>
+        <Button
+          className="rounded-sm"
+          onClick={generateImage}
+          disabled={loading}
+        >
+          {(!loading && "Generate Sketch") || "Generating..."}
+        </Button>
+        {revisedPrompt && <p className="text-xs opacity-20">{revisedPrompt}</p>}
+      </ResizablePanel>
+      <ResizableHandle />
+
+      <ResizablePanel className="p-2">
+        <div className="aspect-square max-h-screen w-full flex items-center justify-center">
+          {image && (
+            <div>
+              <img
+                src={image}
+                alt="generated image"
+                className="max-w-full max-h-full rounded-md"
+              />
+            </div>
+          )}
+          {loading && <Loader size={24} className="animate-spin" />}
+          {!image && !loading && (
+            <div className="flex flex-col items-center gap-2 text-sm text-black/10">
+              Your artwork will appear here.
+            </div>
+          )}
+        </div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 };
 
