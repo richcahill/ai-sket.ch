@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState } from "react";
-import TextareaAutosize from "react-textarea-autosize";
+import { StyleSelector } from "@/components/style-selector";
 import { Button } from "@/components/ui/button";
 import { checkPassword } from "@/actions/checkPassword";
 import {
@@ -9,8 +9,9 @@ import {
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
-import { Loader } from "lucide-react";
-import { set } from "zod";
+import { Loader, Wand } from "lucide-react";
+import { type Style, styles } from "@/lib/styles";
+import { toast } from "sonner";
 
 interface Props {
   // Define your component props here
@@ -25,6 +26,7 @@ const Generator = (props: Props) => {
   );
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
+  const [selectedStyle, setSelectedStyle] = useState<Style>(styles[0]);
 
   const generateImage = async () => {
     setLoading(true);
@@ -38,8 +40,8 @@ const Generator = (props: Props) => {
       return;
     }
 
-    let sketchPrompt =
-      "A simple line drawing sharpie style sketch of " + prompt;
+    let sketchPrompt = selectedStyle.prompt + prompt;
+    console.log(sketchPrompt);
     const response = await fetch("/api", {
       method: "POST",
       headers: {
@@ -60,34 +62,45 @@ const Generator = (props: Props) => {
       className="gap-4 w-full p-4 rounded-md"
     >
       <ResizablePanel
-        className="flex flex-col gap-2 min-w-72 max-w-xl"
+        className="flex flex-col gap-4 min-w-72 max-w-xl"
         defaultSize={33}
       >
-        <h1 className="font-medium">Prompt</h1>
-        <div className="flex flex-col gap-1 flex-1">
-          <label htmlFor="prompt" className="text-sm opacity-30 leading-tight">
-            A simple line drawing sharpie style sketch of...
+        <div className="flex flex-col gap-0.5 flex-1">
+          <label htmlFor="prompt" className="font-medium text-sm">
+            Prompt
           </label>
-          <TextareaAutosize
+          <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="w-full h-11 border p-2 flex-1 leading-tight bg-white/40 rounded-sm"
+            className="w-full overflow-auto h-11 border p-2 flex-1 leading-tight bg-white/40 rounded-sm text-sm"
           />
         </div>
-        <input
-          type="password"
-          placeholder="Password"
-          className="border p-2 leading-tight bg-white/40 rounded-sm"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button
-          className="rounded-sm"
-          onClick={generateImage}
-          disabled={loading}
-        >
-          {(!loading && "Generate Sketch") || "Generating..."}
-        </Button>
+        <div className="flex flex-col gap-0.5 ">
+          <label htmlFor="prompt" className="font-medium text-sm">
+            Style
+          </label>
+          <StyleSelector
+            selectedStyle={styles[0]}
+            setSelectedStyle={setSelectedStyle}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <input
+            type="password"
+            placeholder="Password"
+            className="border p-2 leading-tight bg-white/40 rounded-sm text-sm"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button
+            className="rounded-sm flex justify-between"
+            onClick={generateImage}
+            disabled={loading}
+          >
+            <div>{(!loading && "Generate Sketch") || "Generating..."}</div>
+            <Wand size={16} />
+          </Button>
+        </div>
       </ResizablePanel>
       <ResizableHandle />
 
@@ -99,13 +112,12 @@ const Generator = (props: Props) => {
             </div>
           )}
           {image && !loading && !error && (
-            <div>
-              <img
-                src={image}
-                alt={revisedPrompt || prompt}
-                className="max-w-full max-h-full rounded-md"
-              />
-            </div>
+            <img
+              src={image}
+              alt={revisedPrompt || prompt}
+              className="max-w-full max-h-full rounded-md cursor-crosshair"
+              // copy the image to clipboard on click
+            />
           )}
           {loading && <Loader size={24} className="animate-spin" />}
           {!image && !loading && !error && (

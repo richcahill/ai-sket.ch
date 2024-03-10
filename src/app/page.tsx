@@ -4,7 +4,9 @@ export default function Home() {
   return (
     <main className="flex min-h-screen max-h-screen container mx-auto flex-col items-stretch justify-start p-2">
       <nav className="flex justify-between p-4">
-        <h1 className="text-xl font-medium tracking-tight">ai-sket.ch</h1>
+        <a href="/">
+          <h1 className="text-2xl text-blue-400 tracking-tight">ai-sket.ch</h1>
+        </a>
         <div>
           <a
             href="https://richmak.es"
