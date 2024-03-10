@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sketcher",
-  description: "Turn your sketches into sharpie illustrations.",
+  title: "AI-Sket.ch",
+  description: "Create sketches and illustrations with AI.",
 };
 
 export default function RootLayout({
