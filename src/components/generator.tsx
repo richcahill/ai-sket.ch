@@ -1,15 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import TextareaAutosize from "react-textarea-autosize";
 import { Button } from "@/components/ui/button";
+import { checkPassword } from "@/actions/checkPassword";
 import {
   ResizablePanelGroup,
   ResizablePanel,
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { Loader } from "lucide-react";
+import { set } from "zod";
 
 interface Props {
   // Define your component props here
@@ -22,9 +23,20 @@ const Generator = (props: Props) => {
   const [prompt, setPrompt] = useState<string>(
     "a group of people sitting around a campfire in the woods"
   );
+  const [password, setPassword] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   const generateImage = async () => {
     setLoading(true);
+    setError("");
+
+    const pwCheck = await checkPassword(password);
+    if (!pwCheck.success) {
+      await console.log(checkPassword(password));
+      setError("Incorrect password, ask rich@rc3.me for access.");
+      setLoading(false);
+      return;
+    }
 
     let sketchPrompt =
       "A simple line drawing sharpie style sketch of " + prompt;
@@ -66,6 +78,8 @@ const Generator = (props: Props) => {
           type="password"
           placeholder="Password"
           className="border p-2 leading-tight bg-white/40 rounded-sm"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           className="rounded-sm"
@@ -79,7 +93,12 @@ const Generator = (props: Props) => {
 
       <ResizablePanel defaultSize={67}>
         <div className="aspect-square max-h-screen w-full flex items-center justify-center">
-          {image && !loading && (
+          {error && (
+            <div className="flex flex-col items-center gap-2 text-sm text-red-500">
+              {error}
+            </div>
+          )}
+          {image && !loading && !error && (
             <div>
               <img
                 src={image}
@@ -89,7 +108,7 @@ const Generator = (props: Props) => {
             </div>
           )}
           {loading && <Loader size={24} className="animate-spin" />}
-          {!image && !loading && (
+          {!image && !loading && !error && (
             <div className="flex flex-col items-center gap-2 text-sm text-black/10">
               Your artwork will appear here.
             </div>
