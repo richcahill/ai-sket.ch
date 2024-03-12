@@ -27,6 +27,7 @@ const Generator = () => {
     if (!pwCheck.success) {
       await console.log(checkPassword(password));
       setError("Incorrect password, ask rich@rc3.me for access.");
+      setPassword("");
       setLoading(false);
       return;
     }
@@ -49,11 +50,13 @@ const Generator = () => {
 
   return (
     <div className="gap-4 w-full p-4 rounded-md flex md:flex-row flex-col h-full items-stretch">
-      <div className="flex md:w-1/2 flex-col gap-4">
+      <div className="flex md:w-1/2 flex-col gap-3">
         <div className="flex flex-col gap-0.5 flex-1">
-          <label htmlFor="prompt" className="font-medium text-sm">
-            Prompt
-          </label>
+          <div className="font-medium text-sm">Describe The Scene</div>
+          <div className="text-xs opacity-40 mb-1">
+            The more detailed the better, describe what is happening, who is
+            there, and where it is.
+          </div>
           <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -61,24 +64,27 @@ const Generator = () => {
           />
         </div>
         <div className="flex flex-col gap-0.5 ">
-          <label htmlFor="prompt" className="font-medium text-sm">
-            Style
-          </label>
+          <div className="font-medium text-sm">Select a Style</div>
+          <div className="text-xs opacity-40 mb-1">
+            Pick from a selection of styles for your sketch.
+          </div>
           <StyleSelector
             selectedStyle={styles[0]}
             setSelectedStyle={setSelectedStyle}
           />
         </div>
-        <div className="flex flex-col gap-1">
+        <div className="flex gap-1 border-t border-zinc-200 pt-4 mt-1">
           <input
             type="password"
             placeholder="Password"
-            className="border p-2 leading-tight bg-white/40 rounded-sm text-sm"
+            className={`border p-2 px-3 leading-tight bg-white/40 rounded-sm text-sm w-24 ${
+              error ? "outline outline-1 outline-red-500" : ""
+            }`}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button
-            className="rounded-sm flex justify-between"
+            className="rounded-sm flex justify-between flex-1"
             onClick={generateImage}
             disabled={loading}
           >
