@@ -52,7 +52,7 @@ const Generator = () => {
     <div className="gap-4 w-full p-4 rounded-md flex md:flex-row flex-col h-full items-stretch">
       <div className="flex md:w-1/2 flex-col gap-3">
         <div className="flex flex-col gap-0.5 flex-1">
-          <div className="font-medium text-sm">Describe The Scene</div>
+          <div className="font-medium text-sm">Describe the Scene</div>
           <div className="text-xs opacity-40 mb-1">
             The more detailed the better, describe what is happening, who is
             there, and where it is.
